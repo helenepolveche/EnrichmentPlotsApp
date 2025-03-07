@@ -1,0 +1,15 @@
+*.xlsx*
+.~lock*
+*.Rproj
+*.Rhistory
+*.RdataTmp*
+.Rproj.user/
+data/
+results/
+*.html
+*.RData
+*_cache/
+*_files/
+ppt/
+*.pdf
+omnipathr-log/
