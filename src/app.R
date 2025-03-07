@@ -21,6 +21,7 @@ ui <- fluidPage(
     
       column(9,  # 9/12 = 75%
        DTOutput("table"),
+       actionButton("clear_selection", "Retirer les sélections"),
        plotOutput("dotplot")
       )
     )
@@ -32,7 +33,6 @@ server <- function(input, output, session) {
   data <- reactive({
     req(input$file)
     df <- read.csv(input$file$datapath, sep="\t", header=TRUE)
-    #updateSelectInput(session, "x_var", choices = c("NAME", "DESCRIPTION"), selected = "NAME")
     updateSelectInput(session, "y_var", choices = c("ES", "NES"), selected = "NES")
     updateSliderInput(session, "size_range", min = 0, max = max(df$SIZE, na.rm = TRUE), value = c(0, max(df$SIZE, na.rm = TRUE)))
     return(df)
@@ -71,9 +71,24 @@ server <- function(input, output, session) {
       formatStyle(columns = colnames(final_data()), fontSize = '10px')
   })
   
+  selected_data <- reactive({
+    req(final_data())
+    selected_rows <- input$table_rows_selected
+    if (length(selected_rows) > 0) {
+      return(final_data()[selected_rows, ])
+    } else {
+      return(final_data())
+    }
+  })
+  
+  observeEvent(input$clear_selection, {
+    # clean rows
+    DT::dataTableProxy("table") %>% DT::selectRows(NULL)
+  })
+  
   output$dotplot <- renderPlot({
-    req(final_data(), input$y_var)
-    df_plot <- final_data() %>%
+    req(selected_data(), input$y_var)
+    df_plot <- selected_data() %>%
       arrange(desc(.data[[input$y_var]])) %>%
       mutate(NAME = factor(NAME, levels = NAME),
              !!sym(input$y_var) := as.numeric(.data[[input$y_var]]))
@@ -88,5 +103,5 @@ server <- function(input, output, session) {
   })
 }
 
-# Lancer l'application
+# launch app
 shinyApp(ui = ui, server = server)
