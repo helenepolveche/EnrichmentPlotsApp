@@ -1,33 +1,5 @@
-library(shiny)
-library(ggplot2)
-library(DT)
-library(dplyr)
+source("global.R") # configurations
 
-# Interface utilisateur
-ui <- fluidPage(
-  titlePanel("Visualisation des Résultats d'Enrichissement"),
-  
-  fluidRow(
-    column(3,  # 3/12 = 25%
-           wellPanel(
-            fileInput("file", "Charger un fichier CSV", accept = c(".csv", ".tsv")),
-            #selectInput("x_var", "Axe X", choices = NULL),
-            selectInput("y_var", "Axe Y", choices = NULL),
-            sliderInput("size_range", "Taille des points (SIZE)", min = 0, max = 100, value = c(0, 100)),
-            numericInput("fdr_thresh", "Seuil FDR q-val", value = 0.05, min = 0, max = 1, step = 0.01) #,
-            #actionButton("update", "Mettre à jour")
-          )
-      ),
-    
-      column(9,  # 9/12 = 75%
-       DTOutput("table"),
-       actionButton("clear_selection", "Retirer les sélections"),
-       plotOutput("dotplot")
-      )
-    )
-  )
-
-# Serveur
 server <- function(input, output, session) {
   
   data <- reactive({
@@ -50,7 +22,7 @@ server <- function(input, output, session) {
     max_size <- ifelse(nrow(df) > 0, max(df$SIZE, na.rm = TRUE), 100)
     updateSliderInput(session, "size_range", min = 0, max = max_size)
   })
-    
+  
   final_data <- reactive({
     req(filtered_data())
     
@@ -59,14 +31,15 @@ server <- function(input, output, session) {
       mutate( NES = round(NES, 3)) %>% 
       mutate( ES = round(ES, 3)) %>% 
       select(NAME, SIZE, ES, NES, NOM.p.val, FDR.q.val)
+    #rownames(df) <- NULL
     
     return(df)
   })
   
   output$table <- renderDT({
-    datatable(final_data(), options = list(pageLength = 10, autoWidth = TRUE, 
-                                              columnDefs = list(list(targets = '_all', 
-                                                                     className = 'dt-left', width = '10%'))),
+    datatable(final_data(), options = list(pageLength = 10, autoWidth = TRUE, #rownames = FALSE,
+                                           columnDefs = list(list(targets = '_all', 
+                                                                  className = 'dt-left', width = '10%'))),
               style = "bootstrap") %>%
       formatStyle(columns = colnames(final_data()), fontSize = '10px')
   })
@@ -86,7 +59,7 @@ server <- function(input, output, session) {
     DT::dataTableProxy("table") %>% DT::selectRows(NULL)
   })
   
-  output$dotplot <- renderPlot({
+  plot_reactive <- reactive({
     req(selected_data(), input$y_var)
     df_plot <- selected_data() %>%
       arrange(desc(.data[[input$y_var]])) %>%
@@ -99,9 +72,25 @@ server <- function(input, output, session) {
       theme_minimal() +
       coord_flip() +
       scale_y_continuous() +
-      labs(title = " ", x = " ", y = input$y_var)
+      labs(title = "  ", x = " ", y = input$y_var)
   })
+  
+  output$dotplot <- renderPlot({
+    plot_reactive()
+  })
+  
+  output$download_png <- downloadHandler(
+    filename = function() { "dotplot.png" },
+    content = function(file) {
+      ggsave(file, plot = plot_reactive(), device = "png", dpi = 300, width = 10, height = 7)
+    }
+  )
+  
+  output$download_svg <- downloadHandler(
+    filename = function() { "dotplot.svg" },
+    content = function(file) {
+      ggsave(file, plot = plot_reactive(), device = "svg", dpi = 300, width = 10, height = 7)
+    }
+  )
 }
 
-# launch app
-shinyApp(ui = ui, server = server)
