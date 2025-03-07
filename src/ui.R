@@ -36,7 +36,8 @@ ui <- navbarPage(
   tabPanel("À propos",
            fluidPage(
              h2("À propos de cette application"),
-             p("Cette application permet de visualiser les données GSEA sous forme de dotplots.")
+             p("Cette application permet de visualiser les données GSEA sous forme de dotplots."),
+             p("Pour tout problème rencontré: contacher Hélène Polvèche ( hpolveche[AT]istem.fr )")
            )
   )
 )

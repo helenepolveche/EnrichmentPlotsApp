@@ -38,6 +38,7 @@ server <- function(input, output, session) {
   
   output$table <- renderDT({
     datatable(final_data(), options = list(pageLength = 10, autoWidth = TRUE, #rownames = FALSE,
+                                           language = list(emptyTable = "Il n'y a pas de Pathways avec ces seuils"),
                                            columnDefs = list(list(targets = '_all', 
                                                                   className = 'dt-left', width = '10%'))),
               style = "bootstrap") %>%
