@@ -15,7 +15,10 @@ ui <- navbarPage(
            fluidRow(
              column(3,  # 3/12 = 25%
                     wellPanel(
-                      fileInput("file", "Charger un fichier CSV / TSV", accept = c(".csv", ".tsv")),
+                      fileInput("file", label = tagList("Charger un fichier CSV / TSV", 
+                                tag$span("?", style = "color: blue; cursor: help;", 
+                                         title = "Le fichier, issu d'une analyse GSEA, doit contenir au minimum des colonnes nommées 'SIZE', 'NES', 'ES', et 'FDR q-val'"), 
+                                accept = c(".csv", ".tsv")),
                       selectInput("y_var", "NES / ES", choices = NULL),
                       sliderInput("size_range", "Taille des points (SIZE)", min = 0, max = 100, value = c(0, 100)),
                       numericInput("fdr_thresh", "Seuil FDR q-val", value = 0.05, min = 0, max = 1, step = 0.01) #,
@@ -33,11 +36,13 @@ ui <- navbarPage(
            )
   ),
   
-  tabPanel("À propos",
+  tabPanel("Aide",
            fluidPage(
-             h2("À propos de cette application"),
+             h3("À propos de cette application"),
              p("Cette application permet de visualiser les données GSEA sous forme de dotplots."),
-             p("Pour tout problème rencontré: contacher Hélène Polvèche ( hpolveche[AT]istem.fr )")
+             p("Pour tout problème rencontré: contacher Hélène Polvèche ( hpolveche[AT]istem.fr )")#,
+             #h3("Fichier d'entrée type :")
            )
   )
+)
 )
