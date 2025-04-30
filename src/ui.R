@@ -29,8 +29,12 @@ ui <- navbarPage(
              column(9,  # 9/12 = 75%
                     DTOutput("table"),
                     actionButton("clear_selection", "Retirer les sélections"),
-                    downloadButton("download_png", "PNG"),
-                    downloadButton("download_svg", "SVG"),
+                    tagList(
+                      downloadButton("download_png", "PNG", style = "margin-right: 10px;", 
+                                     title = "'Portable Network Graphics' est un format d'image matricielle qui utilise une compression sans perte, idéal pour des graphiques nets avec transparence."),
+                      downloadButton("download_svg", "SVG", 
+                                     title = "'Scalable Vector Graphics' est un format d'image vectorielle qui permet un redimensionnement sans perte de qualité, parfait pour les présentations et publications")
+                      ),
                     plotOutput("dotplot")
              )
            )
