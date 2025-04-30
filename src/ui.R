@@ -11,7 +11,7 @@ ui <- navbarPage(
   header = navbar_style,
   
   
-  tabPanel("Acceuil",
+  tabPanel("Accueil",
            fluidPage(
              h3("À propos de cette application"),
              fluidRow(
