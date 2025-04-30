@@ -24,7 +24,7 @@ ui <- navbarPage(
 Plutôt que de regarder les gènes individuellement, GSEA évalue si des ensembles fonctionnels (ex. voies KEGG, processus GO) sont globalement activés ou réprimés.
 Elle permet ainsi de détecter des signaux biologiques subtils à l’échelle de groupes de gènes cohérents, même si les gènes pris séparément ne sont pas tous significativement modifiés.",
                         style = "text-align: justify;"),
-                      p("L'outil GSEA est disponible sur le site", a("https://www.gsea-msigdb.org/gsea/index.jsp", href="https://www.gsea-msigdb.org/gsea/index.js", target = "_blank"), ". ")
+                      p("L'outil GSEA est disponible sur le site", a("https://www.gsea-msigdb.org/gsea/index.jsp", href="https://www.gsea-msigdb.org/gsea/index.jsp", target = "_blank"), ". ")
                ),
                column(6,),
                tags$img(src = "example_dotplot.svg", height = "300px", 
