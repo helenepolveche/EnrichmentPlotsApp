@@ -19,20 +19,22 @@ ui <- navbarPage(
                       p("Cette application permet de visualiser les données GSEA sous forme de dotplots."),
                       p("Pour tout problème rencontré: contacter Hélène Polvèche ( hpolveche[AT]istem.fr )"),
                       h3("Qu'est-ce que GSEA ?"),
-                      p("L’analyse GSEA (Gene Set Enrichment Analysis) est une méthode bioinformatique utilisée pour déterminer si un groupe de gènes (appelé ensemble de gènes) 
+                      p("L’analyse GSEA (", tags$i("Gene Set Enrichment Analysis"), ") est une méthode bioinformatique utilisée pour déterminer si un groupe de gènes (appelé ensemble de gènes) 
                       est statistiquement surreprésenté parmi des gènes classés selon leur expression différentielle entre deux conditions (ex. traitement vs contrôle).
 Plutôt que de regarder les gènes individuellement, GSEA évalue si des ensembles fonctionnels (ex. voies KEGG, processus GO) sont globalement activés ou réprimés.
 Elle permet ainsi de détecter des signaux biologiques subtils à l’échelle de groupes de gènes cohérents, même si les gènes pris séparément ne sont pas tous significativement modifiés.",
-                        style = "text-align: justify;")
+                        style = "text-align: justify;"),
+                      p("L'outil GSEA est disponible sur le site", a("https://www.gsea-msigdb.org/gsea/index.jsp", href="https://www.gsea-msigdb.org/gsea/index.js", target = "_blank"), ". ")
                ),
                column(6,),
-               tags$img(src = "example_dotplot.svg", height = "400px", 
+               tags$img(src = "example_dotplot.svg", height = "300px", 
                         style = "display: block; margin-left: auto; margin-right: auto; margin-top: 15px;")
              ),
              h3("Fichier d'entrée type :"),
              p("Le fichier, issu d'une analyse GSEA, doit contenir au minimum des colonnes nommées 'SIZE', 'NES', 'ES', et 'FDR q-val'"),
              tags$img(src = "GSEAresultTSV.png", height = "600px", 
-                      style = "display: block; margin-left: auto; margin-right: auto; margin-top: 15px;")
+                      style = "display: block; margin-left: auto; margin-right: auto; margin-top: 15px;"),
+            p(" ")
              
            )
   ),
